@@ -83,7 +83,12 @@
                                 <td>
                                     @if (!string.IsNullOrWhiteSpace(item.Magnet) && item.Magnet != "Na")
                                     {
-                                        <a href="@item.Magnet" class="magnet-btn">Download</a>
+                                        <form method="post" asp-controller="Search" asp-action="Download" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <input type="hidden" name="magnet" value="@item.Magnet" />
+                                            <input type="hidden" name="title" value="@item.Name" />
+                                            <button type="submit" class="magnet-btn">Download</button>
+                                        </form>
                                     }
                                     else
                                     {

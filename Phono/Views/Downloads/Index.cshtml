@@ -1,0 +1,77 @@
+@model List<Phono.Models.TorrentJob>
+
+@{
+    ViewData["Title"] = "Downloads";
+}
+
+<div class="mt-5 mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-2 text-white">Downloads</h1>
+            <p class="text-light opacity-75 mb-0">Monitor active and completed torrent imports.</p>
+        </div>
+        <a class="btn btn-outline-light btn-sm" asp-controller="Downloads" asp-action="Index">Refresh</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    }
+
+    @if (Model.Count == 0)
+    {
+        <div class="alert alert-info">No downloads yet. Start one from Search.</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Progress</th>
+                        <th>Speed</th>
+                        <th>Seeders</th>
+                        <th>Last Update</th>
+                        <th>Errors</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var job in Model)
+                {
+                    var progressText = $"{job.Progress:0.##}%";
+                    var speedText = job.DownloadSpeed > 0 ? $"{Phono.Services.FileService.FormatBytes(job.DownloadSpeed)}/s" : "-";
+                    <tr>
+                        <td>@(string.IsNullOrWhiteSpace(job.Title) ? "Untitled" : job.Title)</td>
+                        <td>@job.Status</td>
+                        <td style="min-width: 180px;">
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar" role="progressbar" style="width: @progressText;" aria-valuenow="@job.Progress" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">@progressText</small>
+                        </td>
+                        <td>@speedText</td>
+                        <td>@(job.Seeds > 0 ? job.Seeds.ToString() : "-")</td>
+                        <td>@job.UpdatedAt.ToLocalTime().ToString("g")</td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(job.ErrorMessage))
+                            {
+                                <span class="text-danger">@job.ErrorMessage</span>
+                            }
+                            else
+                            {
+                                <span class="text-secondary">-</span>
+                            }
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

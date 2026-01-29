@@ -15,6 +15,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Album> Albums { get; set; }
     public DbSet<Artist> Artists { get; set; }
     public DbSet<TrackArtist> TrackArtists { get; set; }
+    public DbSet<TorrentJob> TorrentJobs { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -56,6 +57,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
                   .WithMany(a => a.TrackArtists)
                   .HasForeignKey(ta => ta.ArtistId)
                   .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        modelBuilder.Entity<TorrentJob>(entity =>
+        {
+            entity.HasIndex(t => t.Status);
+            entity.HasIndex(t => t.CreatedAt);
         });
     }
 }
