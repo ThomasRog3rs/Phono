@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using System.Net;
 using Phono.Data;
 using Phono.Models;
 using Phono.Services;
@@ -104,6 +105,17 @@ builder.Services.AddHttpClient<MagnetApiService>((serviceProvider, client) =>
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 builder.Services.AddScoped<MagnetApiService>();
+
+// Configure qBittorrent service
+builder.Services.Configure<TorrentSettings>(builder.Configuration.GetSection("Torrent"));
+builder.Services.AddHttpClient<QBitClientService>((serviceProvider, client) =>
+{
+    var options = serviceProvider.GetRequiredService<IOptions<TorrentSettings>>();
+    client.BaseAddress = new Uri(options.Value.BaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+}).ConfigurePrimaryHttpMessageHandler(() =>
+    new HttpClientHandler { CookieContainer = new CookieContainer() });
+builder.Services.AddHostedService<TorrentMonitorService>();
 
 var app = builder.Build();
 

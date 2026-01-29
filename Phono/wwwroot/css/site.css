@@ -2216,6 +2216,7 @@ footer a:hover {
     font-size: 0.875rem;
     transition: all var(--transition-base);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
 }
 
 .magnet-btn:hover {

@@ -8,11 +8,17 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       MagnetApi__BaseUrl: "http://magnetapi:8000"
+      Torrent__BaseUrl: "http://qbittorrent:8080"
+      Torrent__Username: "admin"
+      Torrent__Password: "adminadmin"
+      Torrent__Category: "phono"
     volumes:
       - ./data:/app/Data
       - ./uploads:/app/wwwroot/uploads
+      - ./downloads:/app/incoming
     depends_on:
       - magnetapi
+      - qbittorrent
     networks:
       - backend
     restart: unless-stopped
@@ -26,6 +32,24 @@ services:
     dns:
       - 1.1.1.1
       - 8.8.8.8
+    networks:
+      - backend
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    ports:
+      - "8081:8080"
+      - "6881:6881"
+      - "6881:6881/udp"
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: UTC
+      WEBUI_PORT: 8080
+    volumes:
+      - ./qbittorrent:/config
+      - ./downloads:/downloads
     networks:
       - backend
     restart: unless-stopped
