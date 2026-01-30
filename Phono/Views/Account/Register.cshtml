@@ -1,35 +1,55 @@
 @model RegisterViewModel
 @{
+    Layout = "_AuthLayout";
     ViewData["Title"] = "Create account";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <h1 class="mb-3">Create account</h1>
-        <p class="text-muted">This setup page is only available before the first user is created.</p>
-        <form asp-action="Register" method="post">
-            @Html.AntiForgeryToken()
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" autocomplete="email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="new-password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="ConfirmPassword" class="form-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">Create account</button>
-        </form>
+<div class="auth-panel">
+    <div class="auth-panel-header">
+        <h1 class="auth-title">Create account</h1>
+        <p class="auth-subtitle">Set up your Phono account</p>
     </div>
+
+    <form asp-action="Register" method="post" class="auth-form">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="auth-error-summary"></div>
+
+        <div class="auth-form-group">
+            <label asp-for="Email" class="auth-label"></label>
+            <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <input asp-for="Email" class="auth-input" placeholder="Email" autocomplete="email" />
+            </div>
+            <span asp-validation-for="Email" class="auth-error"></span>
+        </div>
+
+        <div class="auth-form-group">
+            <label asp-for="Password" class="auth-label"></label>
+            <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input asp-for="Password" class="auth-input" placeholder="Password" autocomplete="new-password" />
+            </div>
+            <span asp-validation-for="Password" class="auth-error"></span>
+        </div>
+
+        <div class="auth-form-group">
+            <label asp-for="ConfirmPassword" class="auth-label"></label>
+            <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input asp-for="ConfirmPassword" class="auth-input" placeholder="Confirm password" autocomplete="new-password" />
+            </div>
+            <span asp-validation-for="ConfirmPassword" class="auth-error"></span>
+        </div>
+
+        <button type="submit" class="auth-button">Create account</button>
+    </form>
 </div>

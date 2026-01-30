@@ -23,9 +23,10 @@ public class AccountController : Controller
 
     [AllowAnonymous]
     [HttpGet]
-    public IActionResult Login(string? returnUrl = null)
+    public async Task<IActionResult> Login(string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
+        ViewData["HasUsers"] = await _userManager.Users.AnyAsync();
         return View(new LoginViewModel());
     }
 
@@ -35,6 +36,7 @@ public class AccountController : Controller
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
+        ViewData["HasUsers"] = await _userManager.Users.AnyAsync();
         if (!ModelState.IsValid)
         {
             return View(model);
